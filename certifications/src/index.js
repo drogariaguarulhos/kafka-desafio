@@ -25,22 +25,20 @@ const run = async () => {
       eachMessage: async ({ topic, partition, message }) => {
         const aluno = JSON.parse(message.value);
         console.log(message.value.toString());
-        setTimeout( async ()=>{
-          const certificade = {
-            id: uuidV4(),
-            hash: md5(`${message.value.toString()}`),
-            message: `O Aluno ${aluno.user.name} paerticipou do curso ${aluno.course} com a nota final ${aluno.grade}.`
-          }
-          await producer.send({
-            topic: 'test-recive',
-            messages: [
-              {
-                key: 'Certificate',
-                value: JSON.stringify(certificade)
-              }
-            ]
-          });
-        }, 3000);
+        const certificade = {
+          id: uuidV4(),
+          hash: md5(`${message.value.toString()}`),
+          message: `O Aluno ${aluno.user.name} paerticipou do curso ${aluno.course} com a nota final ${aluno.grade}.`
+        }
+        await producer.send({
+          topic: 'test-recive',
+          messages: [
+            {
+              key: 'Certificate',
+              value: JSON.stringify(certificade)
+            }
+          ]
+        });
       },
     });
 }
